@@ -6,76 +6,62 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class TestCopilat {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         driver.get("https://qa-bo-admin.smartsortsupport.com/login");
         driver.manage().window().maximize();
 
         System.out.println("Admin is launched successfully");
-        Thread.sleep(3000);
 
-        WebElement email = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//input[@id='email1']")));
+        WebElement email = driver.findElement(By.xpath("//input[@id='email1']"));
         email.sendKeys("SSAdmin");
 
-        WebElement password = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//input[@type='password']")));
+        WebElement password = driver.findElement(By.xpath("//input[@type='password']"));
         password.sendKeys("SSAdmin@123");
 
-        WebElement login = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//span[normalize-space()='Sign In']")));
+        WebElement login = driver.findElement(By.xpath("//span[normalize-space()='Sign In']"));
         login.click();
 
-        Thread.sleep(3000);
-
-        WebElement overallMap = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//span[contains(normalize-space(),'Overall Map')]")));
+        WebElement overallMap = driver.findElement(By.xpath("//span[normalize-space()='Overall Map']"));
         overallMap.click();
 
         System.out.println("Overall Map screen opened successfully");
 
-        selectFilter(wait, "Country Name", "Saudi Arabia");
-        selectFilter(wait, "Region Name", "Eastern Region");
-        selectFilter(wait, "City Name", "Bqaiq");
-        selectFilter(wait, "District Name", "Ishbiliyah");
-        selectFilter(wait, "Zone Name", "Ishbiliyah Zone 1");
+        WebElement countryName = driver.findElement(By.id("countryId"));
+        countryName.click();
+        driver.findElement(By.xpath("//*[@role='option' and normalize-space()='Saudi Arabia']")).click();
 
-        System.out.println("Overall Map filters selected successfully");
-        System.out.println("Selected record:");
-        System.out.println("Country: " + getSelectedFilterValue(wait, "Country Name"));
-        System.out.println("Region: " + getSelectedFilterValue(wait, "Region Name"));
-        System.out.println("City: " + getSelectedFilterValue(wait, "City Name"));
-        System.out.println("District: " + getSelectedFilterValue(wait, "District Name"));
-        System.out.println("Zone: " + getSelectedFilterValue(wait, "Zone Name"));
+        WebElement regionName = driver.findElement(By.id("regionId"));
+        regionName.click();
+        driver.findElement(By.xpath("//*[@role='option' and normalize-space()='Eastern Region']")).click();
 
-        driver.quit();
-    }
+        WebElement cityName = driver.findElement(By.id("cityId"));
+        cityName.click();
+        driver.findElement(By.xpath("//*[@role='option' and normalize-space()='Bqaiq']")).click();
 
-    private static void selectFilter(WebDriverWait wait, String filterName, String optionName) {
-        WebElement filter = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//*[self::label or self::span or self::div][normalize-space()='" + filterName
-                + "']/following::*[self::input or self::button or @role='combobox'][1]")));
-        filter.click();
+        WebElement districtName = driver.findElement(By.id("districtId"));
+        districtName.click();
+        driver.findElement(By.xpath("//*[@role='option' and normalize-space()='Ishbiliyah']")).click();
 
-        WebElement option = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//*[self::option or self::li or self::span or self::div][normalize-space()='"
-                + optionName + "']")));
-        option.click();
-    }
+        WebElement zoneName = driver.findElement(By.id("zoneId"));
+        zoneName.click();
+        driver.findElement(By.xpath("//*[@role='option' and normalize-space()='Ishbilliyah Zone1']")).click();
 
-    private static String getSelectedFilterValue(WebDriverWait wait, String filterName) {
-        WebElement filter = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//*[self::label or self::span or self::div][normalize-space()='" + filterName
-                + "']/following::*[self::input or self::button or @role='combobox'][1]")));
-        String value = filter.getAttribute("value");
-        return value == null || value.isBlank() ? filter.getText() : value;
+        System.out.println("Country: " + countryName.getText());
+        System.out.println("Region: " + regionName.getText());
+        System.out.println("City: " + cityName.getText());
+        System.out.println("District: " + districtName.getText());
+        System.out.println("Zone: " + zoneName.getText());
+
+        //driver.quit();
+
+
+
     }
 }
 
